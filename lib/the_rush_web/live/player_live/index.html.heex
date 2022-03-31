@@ -13,10 +13,14 @@
   </.modal>
 <% end %>
 
-<p><%= live_redirect "Download CSV", to: Routes.player_index_path(@socket, :index), class: "button" %></p>
+<%= form_for :download_csv, Routes.download_path(@socket, :create), fn f -> %>
+  <%= hidden_input f, :players, value: json_encode_players(@players) %>
+  <%= submit "Download CSV", class: "button" %>
+<% end %>
 
-<b>Search player:</b>
-<p>Some input box</p>
+<form phx-change="search">
+  <%= text_input :search_field, :query, placeholder: "Search for player name", autofocus: true, "phx-debounce": "300" %>
+</form>
 
 <table>
   <thead>

@@ -101,4 +101,30 @@ defmodule TheRush.Statistics do
   def change_player(%Player{} = player, attrs \\ %{}) do
     Player.changeset(player, attrs)
   end
+
+  def player_to_struct(player, fields \\ get_fields()) do
+    player
+    |> Map.from_struct()
+    |> Map.take(fields)
+  end
+
+  def get_fields() do
+    [
+      :name,
+      :team,
+      :position,
+      :att,
+      :att_g,
+      :yds,
+      :avg,
+      :yds_g,
+      :td,
+      :lng,
+      :first_downs,
+      :first_downs_pct,
+      :twenty_yds,
+      :fourty_yds,
+      :fum
+    ]
+  end
 end

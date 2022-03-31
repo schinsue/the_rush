@@ -3,6 +3,7 @@ defmodule TheRushWeb.LiveHelpers do
   import Phoenix.LiveView.Helpers
 
   alias Phoenix.LiveView.JS
+  alias TheRush.Statistics
 
   @doc """
   Renders a live component inside a modal.
@@ -56,5 +57,11 @@ defmodule TheRushWeb.LiveHelpers do
     js
     |> JS.hide(to: "#modal", transition: "fade-out")
     |> JS.hide(to: "#modal-content", transition: "fade-out-scale")
+  end
+
+  def json_encode_players(players) do
+    players
+    |> Enum.map(&Statistics.player_to_struct/1)
+    |> Jason.encode!()
   end
 end

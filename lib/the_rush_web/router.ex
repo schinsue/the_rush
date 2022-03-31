@@ -18,12 +18,13 @@ defmodule TheRushWeb.Router do
     pipe_through(:browser)
 
     live "/", PlayerLive.Index, :index
-    live("/players", PlayerLive.Index, :index)
-    live("/players/new", PlayerLive.Index, :new)
-    live("/players/:id/edit", PlayerLive.Index, :edit)
+    live "/players", PlayerLive.Index, :index
+    live "/players/new", PlayerLive.Index, :new
+    live "/players/:id/edit", PlayerLive.Index, :edit
+    live "/players/:id", PlayerLive.Show, :show
+    live "/players/:id/show/edit", PlayerLive.Show, :edit
 
-    live("/players/:id", PlayerLive.Show, :show)
-    live("/players/:id/show/edit", PlayerLive.Show, :edit)
+    post "/players/download_csv", DownloadController, :create
   end
 
   # Other scopes may use custom stacks.
