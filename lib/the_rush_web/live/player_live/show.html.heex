@@ -1,0 +1,96 @@
+<h1>Show Player</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.player_show_path(@socket, :show, @player)}>
+    <.live_component
+      module={TheRushWeb.PlayerLive.FormComponent}
+      id={@player.id}
+      title={@page_title}
+      action={@live_action}
+      player={@player}
+      return_to={Routes.player_show_path(@socket, :show, @player)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @player.name %>
+  </li>
+
+  <li>
+    <strong>Team:</strong>
+    <%= @player.team %>
+  </li>
+
+  <li>
+    <strong>Position:</strong>
+    <%= @player.position %>
+  </li>
+
+  <li>
+    <strong>Att:</strong>
+    <%= @player.att %>
+  </li>
+
+  <li>
+    <strong>Att g:</strong>
+    <%= @player.att_g %>
+  </li>
+
+  <li>
+    <strong>Yds:</strong>
+    <%= @player.yds %>
+  </li>
+
+  <li>
+    <strong>Avg:</strong>
+    <%= @player.avg %>
+  </li>
+
+  <li>
+    <strong>Yds g:</strong>
+    <%= @player.yds_g %>
+  </li>
+
+  <li>
+    <strong>Td:</strong>
+    <%= @player.td %>
+  </li>
+
+  <li>
+    <strong>Lng:</strong>
+    <%= @player.lng %>
+  </li>
+
+  <li>
+    <strong>First downs:</strong>
+    <%= @player.first_downs %>
+  </li>
+
+  <li>
+    <strong>First downs pct:</strong>
+    <%= @player.first_downs_pct %>
+  </li>
+
+  <li>
+    <strong>Twenty yds:</strong>
+    <%= @player.twenty_yds %>
+  </li>
+
+  <li>
+    <strong>Fourty yds:</strong>
+    <%= @player.fourty_yds %>
+  </li>
+
+  <li>
+    <strong>Fum:</strong>
+    <%= @player.fum %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.player_show_path(@socket, :edit, @player), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.player_index_path(@socket, :index) %></span>
