@@ -15,9 +15,15 @@ defmodule TheRushWeb.Router do
   end
 
   scope "/", TheRushWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :index
+    live "/", PlayerLive.Index, :index
+    live("/players", PlayerLive.Index, :index)
+    live("/players/new", PlayerLive.Index, :new)
+    live("/players/:id/edit", PlayerLive.Index, :edit)
+
+    live("/players/:id", PlayerLive.Show, :show)
+    live("/players/:id/show/edit", PlayerLive.Show, :edit)
   end
 
   # Other scopes may use custom stacks.
@@ -36,9 +42,9 @@ defmodule TheRushWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
+      pipe_through(:browser)
 
-      live_dashboard "/dashboard", metrics: TheRushWeb.Telemetry
+      live_dashboard("/dashboard", metrics: TheRushWeb.Telemetry)
     end
   end
 
@@ -48,7 +54,7 @@ defmodule TheRushWeb.Router do
   # node running the Phoenix server.
   if Mix.env() == :dev do
     scope "/dev" do
-      pipe_through :browser
+      pipe_through(:browser)
 
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end

@@ -13,24 +13,29 @@
   </.modal>
 <% end %>
 
+<p><%= live_redirect "Download CSV", to: Routes.player_index_path(@socket, :index), class: "button" %></p>
+
+<b>Search player:</b>
+<p>Some input box</p>
+
 <table>
   <thead>
     <tr>
       <th>Name</th>
       <th>Team</th>
-      <th>Position</th>
+      <th>Pos</th>
       <th>Att</th>
-      <th>Att g</th>
-      <th>Yds</th>
+      <th>Att/G</th>
+      <th><a href="#">Yds</a></th>
       <th>Avg</th>
-      <th>Yds g</th>
-      <th>Td</th>
-      <th>Lng</th>
-      <th>First downs</th>
-      <th>First downs pct</th>
-      <th>Twenty yds</th>
-      <th>Fourty yds</th>
-      <th>Fum</th>
+      <th>Yds/G</th>
+      <th><a href="#">TD</a></th>
+      <th><a href="">Lng</a></th>
+      <th>1st</th>
+      <th>1st%</th>
+      <th>20+</th>
+      <th>40+</th>
+      <th>FUM</th>
 
       <th></th>
     </tr>
