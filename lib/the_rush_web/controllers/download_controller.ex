@@ -3,12 +3,15 @@ defmodule TheRushWeb.DownloadController do
 
   alias TheRush.Statistics
 
-  def create(conn, %{"download_csv" => %{"players" => players}}) do
-    case Jason.decode(players) do
-      {:ok, players} ->
+  def create(conn, %{"download_csv" => %{"params" => params}}) do
+    case Jason.decode(params) do
+      {:ok, params} ->
+        # Get all players with latest params
+        players = Statistics.search_sort_all_players(params, params["query"])
+
         csv =
           players
-          |> Enum.map(&convert_map_keys_to_atom/1)
+          |> Enum.map(&Statistics.player_to_struct/1)
           |> generate_csv()
 
         conn
@@ -30,11 +33,5 @@ defmodule TheRushWeb.DownloadController do
     |> CSV.encode(headers: Statistics.get_fields())
     |> Enum.to_list()
     |> to_string()
-  end
-
-  # fields keys and map keys need to be exactly the same for the csv...
-  defp convert_map_keys_to_atom(map) do
-    map
-    |> Map.new(fn {k, v} -> {String.to_existing_atom(k), v} end)
   end
 end

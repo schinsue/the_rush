@@ -8,6 +8,8 @@ defmodule TheRush.Statistics do
 
   alias TheRush.Statistics.Player
 
+  import TheRushWeb.Live.TableHelpers, only: [sort: 1]
+
   @doc """
   Returns the list of players.
 
@@ -102,12 +104,29 @@ defmodule TheRush.Statistics do
     Player.changeset(player, attrs)
   end
 
+  # Search and sort and return all players
+  # Strictly for CSV download
+  def search_sort_all_players(params, query \\ "") do
+    search_sort_query(params, query)
+    |> Repo.all()
+  end
+
+  # Paginated search and sort
+  def search_sort_players(params, query \\ "") do
+    search_sort_query(params, query)
+    |> Repo.paginate(params)
+  end
+
+  # CSV needs normalized structs
   def player_to_struct(player, fields \\ get_fields()) do
     player
     |> Map.from_struct()
+    # Add the Touchdown to LNG
+    |> Map.update!(:lng, fn lng -> "#{lng}#{player.lng_t}" end)
     |> Map.take(fields)
   end
 
+  # Decide which fields we want to include in CSV
   def get_fields() do
     [
       :name,
@@ -126,5 +145,13 @@ defmodule TheRush.Statistics do
       :fourty_yds,
       :fum
     ]
+  end
+
+  defp search_sort_query(params, query) do
+    from(
+      p in Player,
+      where: ilike(p.name, ^"%#{query}%"),
+      order_by: ^sort(params)
+    )
   end
 end

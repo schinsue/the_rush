@@ -58,10 +58,4 @@ defmodule TheRushWeb.LiveHelpers do
     |> JS.hide(to: "#modal", transition: "fade-out")
     |> JS.hide(to: "#modal-content", transition: "fade-out-scale")
   end
-
-  def json_encode_players(players) do
-    players
-    |> Enum.map(&Statistics.player_to_struct/1)
-    |> Jason.encode!()
-  end
 end

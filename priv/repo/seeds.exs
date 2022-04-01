@@ -1,10 +1,6 @@
 defmodule TheRush.Seed.Helper do
   def sanitize_integer(integer) do
-    {int, _} =
-      "#{integer}"
-      |> String.replace(",", "")
-      |> Integer.parse()
-
+    {int, _} = parse_integer(integer)
     int
   end
 
@@ -16,7 +12,21 @@ defmodule TheRush.Seed.Helper do
     float
   end
 
+  def sanitize_lng(lng) do
+    {lng, t} = parse_integer(lng)
+    %{"lng" => lng, "t" => t}
+  end
+
   def sanitize_string(string), do: "#{string}"
+
+  def parse_integer(integer) do
+    {int, additive} =
+      "#{integer}"
+      |> String.replace(",", "")
+      |> Integer.parse()
+
+    {int, additive}
+  end
 end
 
 alias TheRush.Statistics.Player
@@ -40,7 +50,8 @@ File.read!("./priv/repo/rushing.json")
     first_downs_pct: Helper.sanitize_float(player["1st%"]),
     fourty_yds: Helper.sanitize_integer(player["40+"]),
     fum: Helper.sanitize_integer(player["FUM"]),
-    lng: Helper.sanitize_string(player["Lng"]),
+    lng: Helper.sanitize_lng(player["Lng"])["lng"],
+    lng_t: Helper.sanitize_lng(player["Lng"])["t"],
     name: Helper.sanitize_string(player["Player"]),
     position: Helper.sanitize_string(player["Pos"]),
     td: Helper.sanitize_integer(player["TD"]),

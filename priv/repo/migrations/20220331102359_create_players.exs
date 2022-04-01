@@ -12,7 +12,8 @@ defmodule TheRush.Repo.Migrations.CreatePlayers do
       add :avg, :float
       add :yds_g, :float
       add :td, :integer
-      add :lng, :string
+      add :lng, :integer
+      add :lng_t, :string
       add :first_downs, :integer
       add :first_downs_pct, :float
       add :twenty_yds, :integer

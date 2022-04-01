@@ -3,10 +3,11 @@ defmodule TheRushWeb.PlayerLive.Index do
 
   alias TheRush.Statistics
   alias TheRush.Statistics.Player
+  alias TheRush.Statistics.Search
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :players, list_players())}
+    {:ok, socket}
   end
 
   @impl true
@@ -26,8 +27,10 @@ defmodule TheRushWeb.PlayerLive.Index do
     |> assign(:player, %Player{})
   end
 
-  defp apply_action(socket, :index, _params) do
+  defp apply_action(socket, :index, params) do
     socket
+    |> assign(:params, params)
+    |> assign(:players, Statistics.search_sort_players(params, params["query"]))
     |> assign(:page_title, "Listing Players")
     |> assign(:player, nil)
   end
@@ -37,10 +40,34 @@ defmodule TheRushWeb.PlayerLive.Index do
     player = Statistics.get_player!(id)
     {:ok, _} = Statistics.delete_player(player)
 
-    {:noreply, assign(socket, :players, list_players())}
+    {:noreply, assign(socket, :players, Statistics.search_sort_players(socket.assigns.params))}
   end
 
-  defp list_players do
-    Statistics.list_players()
+  # When search bar emptied list all players
+  def handle_event("search", %{"search_field" => %{"query" => ""}}, socket) do
+    players = Statistics.search_sort_players(socket.assigns.params)
+
+    {:noreply,
+     socket
+     |> assign(:params, Map.merge(socket.assigns.params, %{"query" => ""}))
+     |> assign(:players, players)}
+  end
+
+  # filter and validate query before querying db
+  def handle_event("search", %{"search_field" => query}, socket) do
+    query
+    |> Search.changeset()
+    |> case do
+      %{valid?: true, changes: %{query: query}} ->
+        players = Statistics.search_sort_players(socket.assigns.params, query)
+
+        {:noreply,
+         socket
+         |> assign(:params, Map.merge(socket.assigns.params, %{"query" => query}))
+         |> assign(:players, players)}
+
+      _ ->
+        {:noreply, socket}
+    end
   end
 end

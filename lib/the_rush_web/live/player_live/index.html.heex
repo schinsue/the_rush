@@ -13,40 +13,45 @@
   </.modal>
 <% end %>
 
-<%= form_for :download_csv, Routes.download_path(@socket, :create), fn f -> %>
-  <%= hidden_input f, :players, value: json_encode_players(@players) %>
-  <%= submit "Download CSV", class: "button" %>
-<% end %>
+<div class="display-flex">
+  <%= form_for :download_csv, Routes.download_path(@socket, :create), fn f -> %>
+    <%= hidden_input f, :params, value: Jason.encode!(@params) %>
+    <%= submit "Download CSV", class: "button" %>
+  <% end %>
 
-<form phx-change="search">
-  <%= text_input :search_field, :query, placeholder: "Search for player name", autofocus: true, "phx-debounce": "300" %>
+  <%= link "Reset filters", to: "/", class: "button margin-left-5" %>
+
+  <span><%= live_patch "New Player", to: Routes.player_index_path(@socket, :new), class: "button margin-left-5" %></span>
+</div>
+
+<form phx-change="search" class="search-form" id="search-form">
+  <%= text_input :search_field, :query, placeholder: "Search for player name", autofocus: true, "phx-debounce": "800", value: @params["query"] %>
 </form>
 
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Team</th>
-      <th>Pos</th>
-      <th>Att</th>
-      <th>Att/G</th>
-      <th><a href="#">Yds</a></th>
-      <th>Avg</th>
-      <th>Yds/G</th>
-      <th><a href="#">TD</a></th>
-      <th><a href="">Lng</a></th>
-      <th>1st</th>
-      <th>1st%</th>
-      <th>20+</th>
-      <th>40+</th>
-      <th>FUM</th>
-
+      <th><%= header_link(@params, "Name", :name) %></th>
+      <th><%= header_link(@params, "Team", :team) %></th>
+      <th><%= header_link(@params, "Pos", :position) %></th>
+      <th><%= header_link(@params, "Att", :att) %></th>
+      <th><%= header_link(@params, "Att/G", :att_g) %></th>
+      <th><%= header_link(@params, "Yds", :yds) %></th>
+      <th><%= header_link(@params, "Avg", :avg) %></th>
+      <th><%= header_link(@params, "Yds/G", :yds_g) %></th>
+      <th><%= header_link(@params, "TD", :td) %></th>
+      <th><%= header_link(@params, "Lng", :lng) %></th>
+      <th><%= header_link(@params, "1st", :first_downs) %></th>
+      <th><%= header_link(@params, "1st%", :first_downs_pct) %></th>
+      <th><%= header_link(@params, "20+", :twenty_yds) %></th>
+      <th><%= header_link(@params, "40+", :fourty_yds) %></th>
+      <th><%= header_link(@params, "FUM", :fum) %></th>
       <th></th>
     </tr>
   </thead>
   <tbody id="players">
     <%= for player <- @players do %>
-      <tr id={"player-#{player.id}"}>
+      <tr id={"player-#{player.id}"} class="player-row">
         <td><%= player.name %></td>
         <td><%= player.team %></td>
         <td><%= player.position %></td>
@@ -56,7 +61,7 @@
         <td><%= player.avg %></td>
         <td><%= player.yds_g %></td>
         <td><%= player.td %></td>
-        <td><%= player.lng %></td>
+        <td><%= "#{player.lng}#{player.lng_t}" %></td>
         <td><%= player.first_downs %></td>
         <td><%= player.first_downs_pct %></td>
         <td><%= player.twenty_yds %></td>
@@ -73,4 +78,4 @@
   </tbody>
 </table>
 
-<span><%= live_patch "New Player", to: Routes.player_index_path(@socket, :new) %></span>
+<%= live_component TheRushWeb.Live.PageComponent, params: @params, pagination_data: @players %>

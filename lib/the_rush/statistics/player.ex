@@ -10,7 +10,8 @@ defmodule TheRush.Statistics.Player do
     field :first_downs_pct, :float
     field :fourty_yds, :integer
     field :fum, :integer
-    field :lng, :string
+    field :lng, :integer
+    field :lng_t, :string
     field :name, :string
     field :position, :string
     field :td, :integer
@@ -25,7 +26,40 @@ defmodule TheRush.Statistics.Player do
   @doc false
   def changeset(player, attrs) do
     player
-    |> cast(attrs, [:name, :team, :position, :att, :att_g, :yds, :avg, :yds_g, :td, :lng, :first_downs, :first_downs_pct, :twenty_yds, :fourty_yds, :fum])
-    |> validate_required([:name, :team, :position, :att, :att_g, :yds, :avg, :yds_g, :td, :lng, :first_downs, :first_downs_pct, :twenty_yds, :fourty_yds, :fum])
+    |> cast(attrs, [
+      :name,
+      :team,
+      :position,
+      :att,
+      :att_g,
+      :yds,
+      :avg,
+      :yds_g,
+      :td,
+      :lng,
+      :lng_t,
+      :first_downs,
+      :first_downs_pct,
+      :twenty_yds,
+      :fourty_yds,
+      :fum
+    ])
+    |> validate_required([
+      :name,
+      :team,
+      :position,
+      :att,
+      :att_g,
+      :yds,
+      :avg,
+      :yds_g,
+      :td,
+      :lng,
+      :first_downs,
+      :first_downs_pct,
+      :twenty_yds,
+      :fourty_yds,
+      :fum
+    ])
   end
 end

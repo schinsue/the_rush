@@ -118,3 +118,31 @@
   0% { opacity: 1; }
   100% { opacity: 0; }
 }
+
+.display-flex {
+  display: flex;
+}
+
+.margin-left-5 {
+  margin-left: 5px;
+}
+
+.link-disabled {
+  pointer-events: none;
+  cursor: default;
+  color: #EEE
+}
+
+.page-active {
+  font-weight: bold;
+}
+
+.search-form {
+  margin-bottom: 0px;
+}
+
+.page-component {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
